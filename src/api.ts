@@ -54,7 +54,7 @@ app.get('/', (req, res) => {
   res.status(200).send({ status: 'ok' });
 });
 
-app.get('/api/v1/hello', (req, res) => {
+app.post('/api/v1/hello', (req, res) => {
   console.log('Hello world')
   console.log(res)
   
