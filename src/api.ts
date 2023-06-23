@@ -55,5 +55,8 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/v1/hello', (req, res) => {
+  console.log('Hello world')
+  console.log(res)
+  
   res.status(200).send({ message: 'Hello world' });
 });
