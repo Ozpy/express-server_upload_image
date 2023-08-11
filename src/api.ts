@@ -3,6 +3,8 @@ import cors from 'cors';
 import multer from 'multer';
 import AWS from 'aws-sdk';
 import { ChromaClient, OpenAIEmbeddingFunction } from 'chromadb';
+import { PineconeClient } from '@pinecone-database/pinecone';
+import { Configuration, OpenAIApi } from 'openai';
 
 export const app = express();
 
@@ -64,7 +66,7 @@ app.post('/api/v1/hello', (req, res) => {
 
 async function createCollection(nameCollection: any) {
   const embedder = new OpenAIEmbeddingFunction({
-    openai_api_key: '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'
+    openai_api_key: process.env.OPENAI_API_KEY
   });
   const collection = await client.createCollection({
     name: nameCollection,
@@ -149,7 +151,7 @@ app.post('/api/v1/gptUpsertData', (req, res) => {
       res.status(200).send({ message: 'Search', result: result });
     })
     .catch((err: any) => {
-      console.error('🚀 ~ file: api.ts:153 ~ app.post ~ err:', err);
+      console.log('🚀 ~ file: api.ts:153 ~ app.post ~ ERROR:', err);
       res.status(500).send({ message: 'Error', result: err });
     });
 });
@@ -167,8 +169,6 @@ app.post('/api/v1/gptSearch', (req, res) => {
     });
 });
 
-import { PineconeClient } from '@pinecone-database/pinecone';
-
 async function formatData(data: any) {
   return await processVectors(data).then((result: any) => {
     return result;
@@ -178,6 +178,7 @@ async function formatData(data: any) {
 async function processVectors(data: any) {
   const newVectorsFormatted = await Promise.all(
     data.map(async (vector: any) => {
+      console.log('🚀 ~ file: api.ts:181 ~ data.map ~ vector:', vector);
       const result = await embedText(vector.id);
       return {
         ...vector,
@@ -193,7 +194,7 @@ async function initializePinecone() {
   const pinecone = new PineconeClient();
   await pinecone.init({
     environment: 'us-west4-gcp-free',
-    apiKey: '905807c4-bbfc-48be-88a9-068b53894cd3'
+    apiKey: process.env.PINECONE_API_KEY
   });
 
   return pinecone;
@@ -211,7 +212,7 @@ async function upsertData(indexName: any, data: any) {
 
   const result = await index.upsert({
     upsertRequest: {
-      ...data
+      vectors: data
     }
   });
   return result;
@@ -235,12 +236,9 @@ async function queryData(indexName: any, text: any) {
 }
 
 //openAI
-import { Configuration, OpenAIApi } from 'openai';
-
-const API_KEY = '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';
 const MODEL_VERSION = 'text-embedding-ada-002';
 const configuration = new Configuration({
-  apiKey: API_KEY
+  apiKey: process.env.OPENAI_API_KEY
 });
 const openai = new OpenAIApi(configuration);
 
@@ -252,7 +250,7 @@ export async function embedText(text: string) {
     });
     return response.data.data[0].embedding;
   } catch (e) {
-    console.error('🚀 ~ file: api.ts:256 ~ embedText ~ e:', e);
+    console.log('🚀 ~ file: api.ts:256 ~ embedText ~ ERROR:', e);
     return [];
   }
 }
