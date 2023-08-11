@@ -150,6 +150,7 @@ app.post('/api/v1/gptUpsertData', (req, res) => {
       res.status(200).send({ message: 'Search', result: result });
     })
     .catch((err: any) => {
+      console.error('🚀 ~ file: api.ts:153 ~ app.post ~ err:', err);
       res.status(500).send({ message: 'Error', result: err });
     });
 });
