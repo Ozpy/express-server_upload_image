@@ -102,8 +102,7 @@ app.post('/api/v1/createEmbedding', (req, res) => {
         .send({ message: 'create_chat_embedding', results: results });
     })
     .catch((err: any) => {
-      console.log('errorcreate_chat_embedding');
-      console.log(err);
+      console.error('🚀 ~ file: api.ts:108 ~ app.post ~ catch:', err);
     });
 
   res.status(200).send({ message: 'create_chat_embedding' });
@@ -212,7 +211,7 @@ async function upsertData(indexName: any, data: any) {
 
   const result = await index.upsert({
     upsertRequest: {
-      vectors: data
+      ...data
     }
   });
   return result;
@@ -253,6 +252,7 @@ export async function embedText(text: string) {
     });
     return response.data.data[0].embedding;
   } catch (e) {
+    console.error('🚀 ~ file: api.ts:256 ~ embedText ~ e:', e);
     return [];
   }
 }
