@@ -193,7 +193,6 @@ app.post('/api/v1/gptSearch', (req, res) => {
 });
 
 import { PineconeClient } from '@pinecone-database/pinecone';
-
 async function formatData(data: any) {
   return await processVectors(data).then((result: any) => {
     console.log('🚀 ~ file: api.ts:172 ~ formatData ~ result:', result);
@@ -219,7 +218,7 @@ async function initializePinecone() {
   const pinecone = new PineconeClient();
   await pinecone.init({
     environment: 'us-west4-gcp-free',
-    apiKey: process.env.PINECONE_API_KEY
+    apiKey: '905807c4-bbfc-48be-88a9-068b53894cd3'
   });
 
   return pinecone;
