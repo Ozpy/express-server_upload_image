@@ -66,7 +66,7 @@ app.post('/api/v1/hello', (req, res) => {
 
 async function createCollection(nameCollection: any) {
   const embedder = new OpenAIEmbeddingFunction({
-    openai_api_key: process.env.OPENAI_API_KEY || ''
+    openai_api_key: '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'
   });
   const collection = await client.createCollection({
     name: nameCollection,
@@ -193,6 +193,7 @@ app.post('/api/v1/gptSearch', (req, res) => {
 });
 
 import { PineconeClient } from '@pinecone-database/pinecone';
+
 async function formatData(data: any) {
   return await processVectors(data).then((result: any) => {
     console.log('🚀 ~ file: api.ts:172 ~ formatData ~ result:', result);
@@ -273,13 +274,11 @@ async function queryData(indexName: any, text: any) {
 //openAI
 import { Configuration, OpenAIApi } from 'openai';
 
-const API_KEY = process.env.OPENAI_API_KEY || '';
-
+const API_KEY = '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';
 const MODEL_VERSION = 'text-embedding-ada-002';
 const configuration = new Configuration({
   apiKey: API_KEY
 });
-
 const openai = new OpenAIApi(configuration);
 
 export async function embedText(text: string) {
