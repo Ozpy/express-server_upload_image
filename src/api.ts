@@ -177,7 +177,7 @@ async function formatData(data: any) {
 
 async function processVectors(data: any) {
   const newVectorsFormatted = await Promise.all(
-    data.vectors.map(async (vector: any) => {
+    data.map(async (vector: any) => {
       const result = await embedText(vector.id);
       return {
         ...vector,
