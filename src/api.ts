@@ -179,7 +179,7 @@ async function processVectors(data: any) {
   const newVectorsFormatted = await Promise.all(
     data.map(async (vector: any) => {
       console.log('🚀 ~ file: api.ts:181 ~ data.map ~ vector:', vector);
-      const result = await embedText(vector.id);
+      const result = await embedText(vector.metadata.content);
       return {
         ...vector,
         values: result
@@ -227,7 +227,9 @@ async function queryData(indexName: any, text: any) {
 
   const result = await index.query({
     queryRequest: {
+      includeMetadata: true,
       vector: embed,
+
       includeValues: false,
       topK: 5
     }
