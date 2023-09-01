@@ -29,6 +29,7 @@ const upload = multer({ storage });
 
 app.post('/upload', upload.single('media'), (req: any, res) => {
   const file = req.file;
+  console.log('🚀 ~ file: api.ts:32 ~ app.post ~ file:', file);
 
   if (!file) {
     res.status(400).json({ error: 'No se ha proporcionado ningún archivo' });
