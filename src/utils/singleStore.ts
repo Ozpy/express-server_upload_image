@@ -17,3 +17,7 @@ export async function executeSQL({ query, params }) {
   console.log('🚀 ~ file: singleStore.js:15 ~ executeSQL ~ res:', res);
   return res;
 }
+export async function hello() {
+  console.log('hello');
+  return 'hellow';
+}
