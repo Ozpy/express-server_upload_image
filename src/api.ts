@@ -36,7 +36,6 @@ app.post('/upload', upload.single('media'), (req: any, res) => {
   }
 
   const bucketName = process.env.DO_SPACES_BUCKET;
-  const params = {};
 
   s3.upload(
     {
