@@ -44,7 +44,8 @@ app.post('/upload', upload.single('media'), (req: any, res) => {
       Key: Date.now() + '_' + file.originalname,
       Body: file.buffer,
       ACL: 'public-read',
-      ContentDisposition: 'inline'
+      ContentDisposition: 'inline',
+      ContentType: file.mimetype
     },
     (err, data) => {
       if (err) {
