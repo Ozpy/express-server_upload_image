@@ -14,16 +14,16 @@ app.use(express.text({ type: 'text/html' }));
 const s3 = new AWS.S3({
   accessKeyId: process.env.DO_SPACES_ID,
   secretAccessKey: process.env.DO_SPACES_SECRET,
-  endpoint: new AWS.Endpoint(process.env.DO_SPACE_URL),
+  endpoint: new AWS.Endpoint(process.env.DO_SPACE_URL)
 });
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-app.post('/upload', upload.single('media'), (req:any, res) => {
+app.post('/upload', upload.single('media'), (req: any, res) => {
   const file = req.file;
 
-  console.log('ENV:', process.env)
+  console.log('ENV:', process.env);
 
   if (!file) {
     res.status(400).json({ error: 'No se ha proporcionado ningún archivo' });
@@ -33,9 +33,9 @@ app.post('/upload', upload.single('media'), (req:any, res) => {
   const bucketName = process.env.DO_SPACES_BUCKET;
   const params = {
     Bucket: bucketName,
-    Key:Date.now()+'_'+ file.originalname,
+    Key: Date.now() + '_' + file.originalname,
     Body: file.buffer,
-    ACL: 'public-read',
+    ACL: 'public-read'
   };
 
   s3.upload(params, (err, data) => {
@@ -55,5 +55,5 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/v1/hello', (req, res) => {
-  res.status(200).send({ message: 'Hello world' });
+  res.status(200).send({ message: 'Hello world ' });
 });
