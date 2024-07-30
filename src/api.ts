@@ -31,23 +31,39 @@ app.post('/upload', upload.single('media'), (req: any, res) => {
   }
 
   const bucketName = process.env.DO_SPACES_BUCKET;
-  const params = {
+  const fileName = Date.now() + '_' + file.originalname;
+
+  // Subir el archivo
+  const uploadParams = {
     Bucket: bucketName,
-    Key: Date.now() + '_' + file.originalname,
+    Key: fileName,
     Body: file.buffer,
-    ACL: 'public-read',
-    ContentDisposition: 'inline'
+    ACL: 'public-read'
   };
 
-  s3.upload(params, (err, data) => {
+  s3.upload(uploadParams, (err, data) => {
     if (err) {
       console.error('Error al cargar el archivo:', err);
       res.status(500).json({ error: 'Error al cargar el archivo' });
-    } else {
-      const imageUrl = data.Location;
-      console.log('Archivo cargado exitosamente:', imageUrl);
-      res.json({ imageUrl });
+      return;
     }
+
+    // Generar URL firmada
+    const signedUrlParams = {
+      Bucket: bucketName,
+      Key: fileName,
+      ResponseContentDisposition: 'inline'
+    };
+
+    s3.getSignedUrl('getObject', signedUrlParams, (err, url) => {
+      if (err) {
+        console.error('Error al generar la URL firmada:', err);
+        res.status(500).json({ error: 'Error al generar la URL firmada' });
+      } else {
+        // Devolver la URL firmada
+        res.json({ fileUrl: url });
+      }
+    });
   });
 });
 
