@@ -35,7 +35,8 @@ app.post('/upload', upload.single('media'), (req: any, res) => {
     Bucket: bucketName,
     Key: Date.now() + '_' + file.originalname,
     Body: file.buffer,
-    ACL: 'public-read'
+    ACL: 'public-read',
+    ContentDisposition: 'inline'
   };
 
   s3.upload(params, (err, data) => {
