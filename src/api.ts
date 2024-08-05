@@ -46,7 +46,10 @@ app.post('/upload', upload.single('media'), (req: any, res) => {
       res.status(500).json({ error: 'Error al cargar el archivo' });
     } else {
       const imageUrl = data.Location;
-      console.log('Archivo cargado exitosamente:', imageUrl);
+      //loguito-images-space.nyc3.cdn.digitaloceanspaces.com/100900964_2733938383399722_3156079111701528576_n.png
+      const imageRemoveCDN = imageUrl.replace('nyc3.cdn', 'nyc3');
+
+      console.log('Archivo cargado exitosamente:', imageRemoveCDN);
       res.json({ imageUrl });
     }
   });
